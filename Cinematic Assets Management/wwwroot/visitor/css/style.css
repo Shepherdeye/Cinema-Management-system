@@ -1,0 +1,18 @@
+﻿.swiper {
+    width: 100%;
+    height: 500px; /* Set a visible height */
+}
+
+.swiper-slide {
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+/* Make the center slide bigger */
+.swiper-slide-active {
+    transform: scale(1.2);
+    transition: transform 0.5s ease;
+    z-index: 10;
+}

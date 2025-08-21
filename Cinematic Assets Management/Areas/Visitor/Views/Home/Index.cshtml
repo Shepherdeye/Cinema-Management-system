@@ -1,0 +1,209 @@
+﻿@model List<Movie>
+
+
+<div class="swiper mySwiper ">
+    <div class="swiper-wrapper">
+        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie1.png")')"></div>
+        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie2.png")')"></div>
+        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie3.png")')"></div>
+        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie4.png")')"></div>
+        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie5.png")')"></div>
+
+    </div>
+    <!-- Navigation buttons -->
+    <div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+</div>
+
+@* filter *@
+<section class="container my-5">
+    <!-- Section Title -->
+    <div class="text-center mb-4">
+        <h1 class="text-light fw-bold">🎬 Our Movies</h1>
+        <p class="text-secondary">Browse and filter movies by your preference</p>
+    </div>
+
+    <!-- Search Bar -->
+    <div class="mb-4">
+        <div class="input-group shadow-sm">
+            <input type="text" class="form-control" placeholder="Search movies...">
+            <button class="btn btn-danger" type="button">
+                <i class="bi bi-search"></i> Search
+            </button>
+        </div>
+    </div>
+
+    <!-- Small Filter Toggle -->
+    <div class="mb-3 text-end">
+        <a class="text-light small text-decoration-none" data-bs-toggle="collapse" href="#filterPanel" role="button" aria-expanded="false" aria-controls="filterPanel">
+            <i class="bi bi-plus-circle"></i>Add Filters +
+        </a>
+    </div>
+
+    <!-- Filter Collapse Panel -->
+    <div class="collapse" id="filterPanel">
+        <div class="card p-3 bg-dark text-light shadow-sm">
+            <form class="row g-3">
+                <!-- Name -->
+                <div class="col-md-3">
+                    <label class="form-label">Movie Name</label>
+                    <input type="text" class="form-control" placeholder="Enter name">
+                </div>
+
+                <!-- Price -->
+                <div class="col-md-3">
+                    <label class="form-label">Price</label>
+                    <select class="form-select">
+                        <option value="">Any Price</option>
+                        <option value="low">Under $10</option>
+                        <option value="medium">$10 - $20</option>
+                        <option value="high">Above $20</option>
+                    </select>
+                </div>
+
+                <!-- Status -->
+                <div class="col-md-3">
+                    <label class="form-label">Status</label>
+                    <select class="form-select">
+                        <option value="">Any Status</option>
+                        <option value="available">Available</option>
+                        <option value="upcoming">Upcoming</option>
+                        <option value="expired">Expired</option>
+                    </select>
+                </div>
+
+                <!-- Cinema -->
+                <div class="col-md-3">
+                    <label class="form-label">Cinema</label>
+                    <select class="form-select">
+                        <option value="">Any Cinema</option>
+                        <option value="cinema1">Cinema 1</option>
+                        <option value="cinema2">Cinema 2</option>
+                        <option value="cinema3">Cinema 3</option>
+                    </select>
+                </div>
+
+                <!-- Apply Filters Button -->
+                <div class="col-12 text-end">
+                    <button type="submit" class="btn btn-danger mt-2">
+                        <i class="bi bi-funnel"></i> Apply Filters
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</section>
+
+
+
+
+<div class="container mt-5">
+    <div class="row g-4">
+        @foreach (var movie in Model)
+        {
+            <div class="col-md-4">
+                <div class="movie-card">
+                    <img src="~/visitor/assets/@movie.ImgUrl" alt="@movie.Name" class="movie-img">
+                    <div class="movie-overlay">
+                        <h5 class="text-white fw-bold">@movie.Name</h5>
+                        <p class="text-light small">@movie.Description</p>
+                        <p class="mb-1 text-white"><strong>Price:</strong> $@movie.Price</p>
+                        <p class="mb-1 text-white">
+                            <strong>Status:</strong>
+                            @if (movie.MovieStatus == MovieStatus.Available)
+                            {
+                                <span class="badge bg-success">Available</span>
+                            }
+                            else if (movie.MovieStatus == MovieStatus.Upcoming)
+                            {
+                                <span class="badge bg-warning text-dark">Upcoming</span>
+                            }
+                            else
+                            {
+                                <span class="badge bg-danger">Expired</span>
+                            }
+                        </p>
+                        <h6 class="mt-2 text-white">Actors:</h6>
+                        <ul class="list-unstyled small text-light">
+                            @foreach (var am in movie.ActorMovies)
+                            {
+                                <li>🎬 @am.Actor.FirstName</li>
+                                
+                            }
+                        </ul>
+                        <a href="@movie.TrailerUrl" target="_blank" class="btn btn-outline-light btn-sm mt-2 custom-trailer-btn">
+                            🎥 Watch Trailer
+                        </a>
+                        <a href="/Movies/Details/@movie.Id" class="btn btn-outline-info btn-sm custom-more-btn">
+                            ℹ More Details
+                        </a>
+                        <a href="/Tickets/Book/@movie.Id" class="btn btn-outline-success btn-sm custom-book-btn">
+                            🎫 Book Ticket
+                        </a>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+
+<nav aria-label="Movies pagination">
+    <ul class="pagination justify-content-center mt-4">
+        <!-- Previous -->
+        <li class="page-item disabled">
+            <a class="page-link bg-dark text-light border-secondary m-1" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+
+        <!-- Page bullets -->
+        <li class="page-item active">
+            <a class="page-link bg-danger border-danger text-light rounded-circle px-3 m-1 py-2" href="#">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link bg-dark border-secondary text-light rounded-circle px-3 m-1 py-2" href="#">2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link bg-dark border-secondary text-light rounded-circle px-3 m-1 py-2" href="#">3</a>
+        </li>
+
+        <!-- Next -->
+        <li class="page-item">
+            <a class="page-link bg-dark text-light border-secondary m-1" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>
+
+
+
+
+
+
+
+
+@section Scripts {
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+                          var swiper = new Swiper(".mySwiper", {
+            slidesPerView: 3,
+            spaceBetween: 30,
+            centeredSlides: true,
+            loop: true,
+            grabCursor: true,
+            autoplay: {
+                delay: 2500,
+                disableOnInteraction: false
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+        });
+
+
+        });
+    </script>
+}
