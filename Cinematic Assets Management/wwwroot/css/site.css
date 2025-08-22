@@ -250,4 +250,78 @@ transform: scale(1.4);
 }
 
 
+body {
+    background-color: #0d0d0d;
+}
 
+h1, h3 {
+    color: #fff;
+}
+
+.badge {
+    font-size: 0.9rem;
+}
+
+.card img {
+    object-fit: cover;
+    height: 250px;
+}
+
+.ratio iframe {
+    border-radius: 10px;
+}
+/* Actor Page Styling */
+.actor-section {
+    background-color: #0d0d0d;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.actor-header {
+    margin-bottom: 40px;
+}
+
+.actor-img {
+    max-width: 500px;
+    height: 250px;
+
+}
+
+.actor-name {
+    font-size: 2.5rem;
+    color: #fff;
+}
+
+.actor-bio {
+    font-size: 1rem;
+    color: #bbb;
+}
+
+.actor-info li {
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.actor-movie-card {
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+    .actor-movie-card:hover {
+        transform: scale(1.05);
+    }
+
+.actor-movie-img {
+    object-fit: cover;
+    height: 250px;
+    border-bottom: 2px solid #222;
+}
+
+.actor-movie-title {
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.actor-movie-btn {
+    width: 100%;
+}

@@ -1,0 +1,42 @@
+﻿@model Actor
+
+<section class="container my-5 text-light actor-section">
+    <!-- Actor Header -->
+    <div class="row align-items-center actor-header">
+        <div class="col-md-4 text-center">
+            <img src="~/visitor/assets/cast/@Model.ProfilePicture" alt="@Model.FirstName @Model.LastName"
+                 class="img-fluid rounded shadow-lg actor-img">
+        </div>
+        <div class="col-md-8">
+            <h1 class="fw-bold actor-name">@Model.FirstName @Model.LastName</h1>
+            <p class="text-secondary actor-bio">@Model.Bio</p>
+
+            @* <ul class="list-unstyled actor-info">
+                <li><strong>Date of Birth:</strong> @Model.BirthDate.ToString("dd MMM yyyy")</li>
+                <li><strong>Nationality:</strong> @Model.Nationality</li>
+                <li><strong>Number of Movies:</strong> @Model.Movies.Count()</li>
+            </ul> *@
+        </div>
+    </div>
+
+    <!-- Movies List -->
+    <div class="actor-movies my-5">
+        <h3 class="mb-4">🎬 Movies Featuring @Model.FirstName</h3>
+        <div class="row g-4">
+            @foreach (var movie in Model.ActorMovies.ToList())
+            {
+                <div class="col-md-3 col-sm-6">
+                    <div class="card bg-dark text-light h-100 shadow-sm actor-movie-card">
+                        <img src="~/visitor/assets/@movie.Movie.ImgUrl" class="card-img-top actor-movie-img" alt="@movie.Movie.Name">
+                        <div class="card-body">
+                            <h6 class="card-title actor-movie-title">@movie.Movie.Name</h6>
+                            <a href="/Visitor/home/Details/@movie.Movie.Id" class="btn btn-outline-light btn-sm actor-movie-btn">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

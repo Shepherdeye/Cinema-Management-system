@@ -1,0 +1,88 @@
+﻿@model MovieWithData
+
+
+
+<section class="container my-5 text-light">
+    <!-- Movie Header -->
+    <div class="row align-items-center">
+        <div class="col-md-4 text-center">
+            <img src="~/visitor/assets/@Model.Movie.ImgUrl" alt="@Model.Movie.Name"
+                 class="img-fluid rounded shadow-lg">
+        </div>
+        <div class="col-md-8">
+            <h1 class="fw-bold">@Model.Movie.Name</h1>
+            <p class="text-secondary">@Model.Movie.Description</p>
+
+            <ul class="list-unstyled">
+                <li><strong class="text-danger rounded p-1">Cinema </strong> @Model.Movie.Cinema?.Name</li>
+                <li><strong class="text-danger rounded p-1">Category </strong> @Model.Movie.Category.Name</li>
+                <li><strong class="text-danger rounded p-1">Price </strong> $@Model.Movie.Price</li>
+                <li><strong class="text-danger rounded p-1">Start Date </strong> @Model.Movie.StartDate</li>
+                <li><strong class="text-danger rounded p-1">End Date </strong> @Model.Movie.EndDate</li>
+               <br />
+                <li>
+                    <strong>Status</strong>
+                    @if (Model.Movie.MovieStatus == MovieStatus.Available)
+                    {
+                        <span class="badge bg-success">Available</span>
+                    }
+                    else if (Model.Movie.MovieStatus == MovieStatus.Upcoming)
+                    {
+                        <span class="badge bg-warning text-dark">Upcoming</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Expired</span>
+                    }
+                </li>
+            </ul>
+
+            <h6 class="cast-title text-white">Cast</h6>
+
+            <div class="cast-list">
+                @foreach (var actor in Model.Movie.ActorMovies.ToList())
+                {
+                    <a href="/visitor/actor/details/@actor.Actor.Id" class="cast-link">
+                        <img src="~/visitor/assets/cast/@actor.Actor.ProfilePicture" alt="@actor.Actor.FirstName" class="cast-img" />
+                    </a>
+                }
+            </div>
+
+            <div class="mt-4">
+                <a href="#" class="btn btn-danger btn-lg me-2">
+                    🎫 Book Ticket
+                </a>
+               
+            </div>
+        </div>
+    </div>
+
+    <!-- Trailer Section -->
+    <div class="my-5">
+        <h3 class="mb-3">🎥 Movie Trailer</h3>
+        <div class="ratio ratio-16x9 rounded shadow-lg">
+            <iframe width="640" height="360" src="https://www.youtube.com/embed/c5Py8ocxPok?list=RDc5Py8ocxPok" title="Nueva INTRO de Netflix | 2020" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <!-- Similar Movies -->
+    <div class="my-5">
+        <h3 class="mb-3">📽 Similar Movies</h3>
+        <div class="row g-3">
+            @foreach (var movie in Model.Movies)
+            {
+                <div class="col-md-3 col-sm-6">
+                    <div class="card bg-dark text-light h-100 shadow-sm">
+                        <img src="~/visitor/assets/@movie.ImgUrl" class="card-img-top" alt="@movie.Name">
+                        <div class="card-body">
+                            <h6 class="card-title">@movie.Name</h6>
+                            <small class="card-title text-danger ">@movie.Category.Name</small>
+                            <br />
+                            <a href="/visitor/home/Details/@movie.Id" class="btn btn-outline-light btn-sm mt-2">View</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>

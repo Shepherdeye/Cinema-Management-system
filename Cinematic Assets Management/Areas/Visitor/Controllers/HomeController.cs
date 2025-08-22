@@ -63,10 +63,10 @@ namespace Cinematic_Assets_Management.Areas.Visitor.Controllers
 
             int TotalCount = movies.Count();
 
-            decimal PageNumbers=Math.Ceiling((decimal)TotalCount /6);
+            decimal PageNumbers = Math.Ceiling((decimal)TotalCount / 3);
             ViewBag.PageNumbers = PageNumbers;
 
-            movies = movies.Skip((page-1)*6).Take(6);
+            movies = movies.Skip((page - 1) * 3).Take(3);
 
 
 
@@ -76,7 +76,7 @@ namespace Cinematic_Assets_Management.Areas.Visitor.Controllers
 
 
             // for slider 
-            var slider = _context.Movies.OrderByDescending(e=>e.Id).Skip(0).Take(6);
+            var slider = _context.Movies.OrderByDescending(e => e.Id).Skip(0).Take(6);
 
 
 
@@ -96,7 +96,39 @@ namespace Cinematic_Assets_Management.Areas.Visitor.Controllers
             return View(moviesWithData);
         }
 
+        public IActionResult Details(int id)
+        {
+            var movie = _context.Movies.Include(e => e.Cinema).Include(e => e.Category).
+                Include(e => e.ActorMovies).ThenInclude(e => e.Actor)
+                .FirstOrDefault(e => e.Id == id);
 
+            if (movie is null)
+            {
+                return NotFound();
+            }
+
+            var movies = _context.Movies.
+                   Include(e => e.Category).
+                   Include(e => e.Cinema).
+                   Include(e => e.ActorMovies)
+                   .ThenInclude(e => e.Actor).Where(e=>e.Id != id&& e.CategoryId==movie.CategoryId).Skip(0).Take(4);
+
+            var categories = _context.Categories;
+
+            var cinemas = _context.Cinemas;
+
+
+            // all data of the index
+            MovieWithData moviesWithData = new()
+            {
+                Movies = movies.ToList(),
+                Categories = categories.ToList(),
+                Cinemas = cinemas.ToList(),
+                Movie = movie
+            };
+
+            return View(moviesWithData);
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

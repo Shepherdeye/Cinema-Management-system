@@ -5,7 +5,8 @@
         public List<Movie> Movies { get; set; } = new();
         public List<Cinema> Cinemas { get; set; } = new();
         public List<Category> Categories { get; set; } = new();
-      public List<Movie> Slider { get; set; } = new();
+        public List<Movie> Slider { get; set; } = new();
+        public Movie? Movie { get; set; }
 
     }
 }

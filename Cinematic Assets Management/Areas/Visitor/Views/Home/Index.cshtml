@@ -171,23 +171,14 @@
                                     <span class="badge bg-danger">Expired</span>
                                 }
                             </p>
-                            @* <h6 class="cast-title text-white">Cast</h6>
 
-                            <div class="cast-list">
-                                @foreach (var actor in movie.ActorMovies.ToList())
-                                {
-                                    <a href="#" class="cast-link">
-                                        <img src="~/visitor/assets/cast/@actor.Actor.ProfilePicture" alt="@actor.Actor.FirstName" class="cast-img" />
-                                    </a>
-                                }
-                            </div> *@
                             <br />
 
+                            <a href="/visitor/home/details/@movie.Id" class="btn btn-outline-info btn-sm custom-more-btn">
+                                ℹ More Details
+                            </a>
                             <a href="@movie.TrailerUrl" target="_blank" class="btn btn-outline-light btn-sm mt-1 custom-trailer-btn">
                                 🎥 Watch Trailer
-                            </a>
-                            <a href="/Movies/Details/@movie.Id" class="btn btn-outline-info btn-sm custom-more-btn">
-                                ℹ More Details
                             </a>
                             <a href="/Tickets/Book/@movie.Id" class="btn btn-outline-success btn-sm custom-book-btn">
                                 🎫 Book Ticket
@@ -254,14 +245,6 @@
 
 @section Scripts {
     <script>
-                window.addEventListener("load", function() {
-            var element = document.getElementById("moviesList");
-            if(element) {
-                element.scrollIntoView({ behavior: "smooth" });
-            }
-        });
-
-
 
         document.addEventListener("DOMContentLoaded", function () {
          var swiper = new Swiper(".mySwiper", {
@@ -282,3 +265,16 @@
 
     </script>
 }
+<script>
+
+    window.addEventListener("load", function() {
+       
+        setTimeout(function() {
+           
+            window.scrollTo({
+                top: 1100,
+                behavior: "smooth" 
+            });
+        }, 0);
+    });
+</script>
