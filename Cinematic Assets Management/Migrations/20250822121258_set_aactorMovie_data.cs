@@ -10,7 +10,7 @@ namespace Cinematic_Assets_Management.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.Sql("insert into ActorMovies (ActorId, MovieId) values (49, 2);insert into ActorMovies (ActorId, MovieId) values (46, 4);insert into ActorMovies (ActorId, MovieId) values (41, 2);insert into ActorMovies (ActorId, MovieId) values (28, 5);insert into ActorMovies (ActorId, MovieId) values (37, 1);insert into ActorMovies (ActorId, MovieId) values (23, 2);insert into ActorMovies (ActorId, MovieId) values (48, 4);insert into ActorMovies (ActorId, MovieId) values (33, 4);insert into ActorMovies (ActorId, MovieId) values (25, 3);insert into ActorMovies (ActorId, MovieId) values (17, 6);");
+            migrationBuilder.Sql("insert into ActorMovies (ActorId, MovieId) values (1, 1);insert into ActorMovies (ActorId, MovieId) values (2,2);insert into ActorMovies (ActorId, MovieId) values (3, 3);insert into ActorMovies (ActorId, MovieId) values (4, 4);insert into ActorMovies (ActorId, MovieId) values (5, 5);insert into ActorMovies (ActorId, MovieId) values (6,6);insert into ActorMovies (ActorId, MovieId) values (1, 6);insert into ActorMovies (ActorId, MovieId) values (2, 3);insert into ActorMovies (ActorId, MovieId) values (3, 4);insert into ActorMovies (ActorId, MovieId) values (4,5);");
         }
 
         /// <inheritdoc />
