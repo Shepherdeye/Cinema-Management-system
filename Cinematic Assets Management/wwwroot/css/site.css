@@ -1,13 +1,14 @@
-*{
-box-sizing:border-box;
-margin:0;
-padding:0;
+﻿* {
+    box-sizing: border-box;
+    margin: 0px;
+    padding: 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
 }
 
 body {
 background: #0b0f19;
 padding: 0px;
-margin:0;
+margin:0px;
 }
 
 @media (min-width: 768px) {
@@ -18,7 +19,7 @@ font-size: 16px;
 
 header {
 background: linear-gradient(90deg, #000000, #1c1c1c);
-border-bottom: 2px solid #e50914; /* Netflix red accent */
+border-bottom: 2px solid #e50914; 
 }
 
 header .navbar-brand {
@@ -29,7 +30,7 @@ letter-spacing: 1px;
 }
 
 header .navbar-brand:hover {
-    color: #ff4b5c !important;
+color: #ff4b5c !important;
 }
 
 header .nav-link {
@@ -41,8 +42,8 @@ transition: color 0.3s ease, transform 0.3s ease;
 }
 
 header .nav-link:hover {
-    color: #e50914 !important;
-    transform: scale(1.05);
+color: #e50914 !important;
+transform: scale(1.05);
 }
 
 .navbar-toggler {
@@ -98,7 +99,7 @@ transition: transform 0.5s ease, box-shadow 0.5s ease;
 
 /* Active slide scaling */
 .swiper-slide-active {
-    width:80%;
+width:80%;
 transform: scale(1.15);
 z-index: 10;
 box-shadow: 0 6px 25px rgba(229, 9, 20, 0.8);
@@ -116,6 +117,14 @@ transition: color 0.3s ease, transform 0.3s ease;
 color: #ff4b5c;
 transform: scale(1.2);
 }
+
+
+
+
+
+
+
+
 
 .movie-card {
 position: relative;
@@ -139,18 +148,22 @@ filter: blur(3px) brightness(0.5);
 }
 
 .movie-overlay {
-position: absolute;
-top: 0;
-left: 0;
-width: 100%;
-height: 100%;
-padding: 20px;
-opacity: 0;
-transition: opacity 0.5s ease;
-display: flex;
-flex-direction: column;
-justify-content: center;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
+
+
+
 
 .movie-card:hover .movie-overlay {
 opacity: 1;
@@ -170,21 +183,21 @@ transition: all 0.3s ease;
 background-color: rgba(255, 255, 255, 0.2);
 border-color: #ffcc00;
 color: #ffcc00;
-transform: scale(1.05);
+transform: scale(.9);
 }
 
 .custom-more-btn:hover {
-background-color: rgba(255, 255, 255, 0.2);
-border-color: #17a2b8;
-color: #17a2b8;
-transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: #17a2b8;
+    color: #17a2b8;
+    transform: scale(.9);
 }
 
 .custom-book-btn:hover {
-background-color: rgba(255, 255, 255, 0.2);
-border-color: #28a745;
-color: #28a745;
-transform: scale(1.05);
+    background-color: rgba(255, 255, 255, 0.2);
+    border-color: #28a745;
+    color: #28a745;
+    transform: scale(.9);
 }
 
 .card {
@@ -208,3 +221,33 @@ font-weight: 500;
 border-radius: 8px;
 font-weight: 500;
 }
+
+.cast-title {
+margin-bottom: 20px; 
+font-size: 1rem;
+
+}
+
+.cast-list {
+display: flex; 
+flex-wrap: wrap; 
+justify-content: flex-start;
+gap: 10px; 
+}
+
+.cast-img {
+width: 45px; 
+height: 45px;
+margin-bottom:10px;
+border-radius: 50%; 
+object-fit: cover; 
+transition: box-shadow 0.3s, transform 0.3s;
+}
+
+.cast-link:hover .cast-img {
+box-shadow: 0 0 5px red; 
+transform: scale(1.4);
+}
+
+
+

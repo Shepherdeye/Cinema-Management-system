@@ -1,19 +1,27 @@
-﻿@model List<Movie>
-
+﻿@model MovieWithData
 
 <div class="swiper mySwiper ">
     <div class="swiper-wrapper">
-        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie1.png")')"></div>
-        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie2.png")')"></div>
-        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie3.png")')"></div>
-        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie4.png")')"></div>
-        <div class="swiper-slide" style="background-image:url('@Url.Content("~/visitor/assets/movie5.png")')"></div>
+        @foreach (var movie in Model.Slider)
+        {
+            <div class="swiper-slide" style="background-image:url('@Url.Content($"~/visitor/assets/{movie.ImgUrl}")')"></div>
+        }
+
 
     </div>
     <!-- Navigation buttons -->
     <div class="swiper-button-next"></div>
     <div class="swiper-button-prev"></div>
 </div>
+@{
+
+    var statuses = new List<StatusOption>
+    {
+        new StatusOption { Id = MovieStatus.Available, Name = "Available" },
+        new StatusOption { Id = MovieStatus.Expired, Name = "Expired" },
+        new StatusOption { Id = MovieStatus.Upcoming, Name = "Upcoming" }
+    };
+}
 
 @* filter *@
 <section class="container my-5">
@@ -25,12 +33,15 @@
 
     <!-- Search Bar -->
     <div class="mb-4">
-        <div class="input-group shadow-sm">
-            <input type="text" class="form-control" placeholder="Search movies...">
-            <button class="btn btn-danger" type="button">
-                <i class="bi bi-search"></i> Search
-            </button>
-        </div>
+        <form>
+            <div class="input-group shadow-sm">
+                <input type="search" name="search" class="form-control" placeholder="Search movies...">
+                <button typeof="" class="btn btn-danger" type="submit">
+                    <i class="bi bi-search"></i> Search
+                </button>
+            </div>
+
+        </form>
     </div>
 
     <!-- Small Filter Toggle -->
@@ -47,39 +58,67 @@
                 <!-- Name -->
                 <div class="col-md-3">
                     <label class="form-label">Movie Name</label>
-                    <input type="text" class="form-control" placeholder="Enter name">
+                    <input type="text" name="Name" value="@ViewBag.Name" class="form-control" placeholder="Enter name">
                 </div>
 
                 <!-- Price -->
                 <div class="col-md-3">
                     <label class="form-label">Price</label>
-                    <select class="form-select">
-                        <option value="">Any Price</option>
-                        <option value="low">Under $10</option>
-                        <option value="medium">$10 - $20</option>
-                        <option value="high">Above $20</option>
-                    </select>
+                    <input type="number" value="@ViewBag.Price" name="Price" class="form-control" placeholder="Enter Price">
+
                 </div>
 
                 <!-- Status -->
                 <div class="col-md-3">
                     <label class="form-label">Status</label>
-                    <select class="form-select">
+                    <select name="MovieStatus" class="form-select">
                         <option value="">Any Status</option>
-                        <option value="available">Available</option>
-                        <option value="upcoming">Upcoming</option>
-                        <option value="expired">Expired</option>
+                        @foreach (var status in statuses)
+                        {
+                            if (status.Id == ViewBag.MovieStatus)
+                            {
+                                <option selected value="@status.Id">@status.Name</option>
+                            }
+                            else
+                            {
+                                <option value="@status.Id">@status.Name</option>
+                            }
+
+                        }
+                    </select>
+
+
+                </div>
+                <!-- Category -->
+                <div class="col-md-3">
+                    <label class="form-label">Cinema</label>
+                    <select name="Category" class="form-select">
+                        <option value="">Any Category</option>
+                        @foreach (var category in Model.Categories)
+                        {
+                            if (category.Id == ViewBag.Category)
+                            {
+                                <option selected value="@category.Id">@category.Name</option>
+                            }
+                            <option value="@category.Id">@category.Name</option>
+                        }
                     </select>
                 </div>
 
                 <!-- Cinema -->
                 <div class="col-md-3">
                     <label class="form-label">Cinema</label>
-                    <select class="form-select">
+                    <select name="Cinema" class="form-select">
                         <option value="">Any Cinema</option>
-                        <option value="cinema1">Cinema 1</option>
-                        <option value="cinema2">Cinema 2</option>
-                        <option value="cinema3">Cinema 3</option>
+                        @foreach (var cinema in Model.Cinemas)
+                        {
+                            if (cinema.Id == ViewBag.Cinema)
+                            {
+                                <option selected value="@cinema.Id">@cinema.Name</option>
+                            }
+
+                            <option value="@cinema.Id">@cinema.Name</option>
+                        }
                     </select>
                 </div>
 
@@ -99,50 +138,68 @@
 
 <div class="container mt-5">
     <div class="row g-4">
-        @foreach (var movie in Model)
+        @if (Model.Movies.Any())
         {
-            <div class="col-md-4">
-                <div class="movie-card">
-                    <img src="~/visitor/assets/@movie.ImgUrl" alt="@movie.Name" class="movie-img">
-                    <div class="movie-overlay">
-                        <h5 class="text-white fw-bold">@movie.Name</h5>
-                        <p class="text-light small">@movie.Description</p>
-                        <p class="mb-1 text-white"><strong>Price:</strong> $@movie.Price</p>
-                        <p class="mb-1 text-white">
-                            <strong>Status:</strong>
-                            @if (movie.MovieStatus == MovieStatus.Available)
-                            {
-                                <span class="badge bg-success">Available</span>
-                            }
-                            else if (movie.MovieStatus == MovieStatus.Upcoming)
-                            {
-                                <span class="badge bg-warning text-dark">Upcoming</span>
-                            }
-                            else
-                            {
-                                <span class="badge bg-danger">Expired</span>
-                            }
-                        </p>
-                        <h6 class="mt-2 text-white">Actors:</h6>
-                        <ul class="list-unstyled small text-light">
-                            @foreach (var am in movie.ActorMovies)
-                            {
-                                <li>🎬 @am.Actor.FirstName</li>
-                                
-                            }
-                        </ul>
-                        <a href="@movie.TrailerUrl" target="_blank" class="btn btn-outline-light btn-sm mt-2 custom-trailer-btn">
-                            🎥 Watch Trailer
-                        </a>
-                        <a href="/Movies/Details/@movie.Id" class="btn btn-outline-info btn-sm custom-more-btn">
-                            ℹ More Details
-                        </a>
-                        <a href="/Tickets/Book/@movie.Id" class="btn btn-outline-success btn-sm custom-book-btn">
-                            🎫 Book Ticket
-                        </a>
+            @foreach (var movie in Model.Movies)
+            {
+                <div class="col-md-4">
+                    <div class="movie-card">
+                        <img src="~/visitor/assets/@movie.ImgUrl" alt="@movie.Name" class="movie-img">
+                        <div class="movie-overlay">
+                            <h5 class="text-white fw-bold text-xl">@movie.Name</h5>
+                            <p class="text-light small">
+                               
+                            </p>
+                            <p class="mb-1 text-white"><strong>Category </strong> @movie.Category?.Name</p>
+                            <p class="mb-1 text-white"><strong>Cinema</strong> @movie.Cinema?.Name</p>
+                            <p class="mb-1 text-white"><strong>Price</strong> $@movie.Price</p>
+                            <p class="mb-1 text-white"><strong>StartDate</strong> @movie.StartDate</p>
+                            <p class="mb-1 text-white"><strong>EndDate</strong> @movie.EndDate</p>
+
+                            <p class="mb-1 text-white">
+                                <strong>Status:</strong>
+                                @if (@movie.MovieStatus == MovieStatus.Available)
+                                {
+                                    <span class="badge bg-success">Available</span>
+                                }
+                                else if (@movie.MovieStatus == MovieStatus.Upcoming)
+                                {
+                                    <span class="badge bg-warning text-dark">Upcoming</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-danger">Expired</span>
+                                }
+                            </p>
+                            @* <h6 class="cast-title text-white">Cast</h6>
+
+                            <div class="cast-list">
+                                @foreach (var actor in movie.ActorMovies.ToList())
+                                {
+                                    <a href="#" class="cast-link">
+                                        <img src="~/visitor/assets/cast/@actor.Actor.ProfilePicture" alt="@actor.Actor.FirstName" class="cast-img" />
+                                    </a>
+                                }
+                            </div> *@
+                            <br />
+
+                            <a href="@movie.TrailerUrl" target="_blank" class="btn btn-outline-light btn-sm mt-1 custom-trailer-btn">
+                                🎥 Watch Trailer
+                            </a>
+                            <a href="/Movies/Details/@movie.Id" class="btn btn-outline-info btn-sm custom-more-btn">
+                                ℹ More Details
+                            </a>
+                            <a href="/Tickets/Book/@movie.Id" class="btn btn-outline-success btn-sm custom-book-btn">
+                                🎫 Book Ticket
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
+        }
+        else
+        {
+            <h1 class="text-center text-light mb-2 display-3">No movies ... !</h1>
         }
     </div>
 </div>
@@ -151,29 +208,40 @@
 <nav aria-label="Movies pagination">
     <ul class="pagination justify-content-center mt-4">
         <!-- Previous -->
-        <li class="page-item cursor-pointer">
-            <a class="page-link bg-dark text-light border-secondary m-1" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-            </a>
-        </li>
+        @if (ViewBag.CurrentPage != 1 && Model.Movies.Count > 0)
+        {
+            <li class="page-item cursor-pointer ">
+                <a class="page-link bg-dark text-light border-secondary m-1" href="/Visitor/home/index?search=@ViewBag.Search&page=@(ViewBag.CurrentPage - 1)&Name=@ViewBag.Name&Price=@ViewBag.Price&MovieStatus=@ViewBag.MovieStatus&Category=@ViewBag.Category&Cinema=@ViewBag.Cinem" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+        }
 
+        @for (int i = 1; i <= ViewBag.PageNumbers; i++)
+        {
+            if (ViewBag.CurrentPage == i)
+            {
+                <li class="page-item active cursor-pointer">
+                    <a class="page-link bg-danger border-danger text-light rounded-circle px-3 m-1 py-2" href="/Visitor/home/index?search=@ViewBag.Search&page=@i&Name=@ViewBag.Name&Price=@ViewBag.Price&MovieStatus=@ViewBag.MovieStatus&Category=@ViewBag.Category&Cinema=@ViewBag.Cinem">@i</a>
+                </li>
+            }
+            else
+            {
+                <li class="page-item cursor-pointer">
+                    <a class="page-link bg-dark border-secondary text-light rounded-circle px-3 m-1 py-2" href="/Visitor/home/index?search=@ViewBag.Search&page=@i&Name=@ViewBag.Name&Price=@ViewBag.Price&MovieStatus=@ViewBag.MovieStatus&Category=@ViewBag.Category&Cinema=@ViewBag.Cinem">@i</a>
+                </li>
+            }
+        }
         <!-- Page bullets -->
-        <li class="page-item active cursor-pointer">
-            <a class="page-link bg-danger border-danger text-light rounded-circle px-3 m-1 py-2" href="#">1</a>
-        </li>
-        <li class="page-item cursor-pointer">
-            <a class="page-link bg-dark border-secondary text-light rounded-circle px-3 m-1 py-2" href="#">2</a>
-        </li>
-        <li class="page-item cursor-pointer">
-            <a class="page-link bg-dark border-secondary text-light rounded-circle px-3 m-1 py-2" href="#">3</a>
-        </li>
-
         <!-- Next -->
-        <li class="page-item cursor-pointer">
-            <a class="page-link bg-dark text-light border-secondary m-1" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-            </a>
-        </li>
+        @if (ViewBag.PageNumbers != ViewBag.CurrentPage&& Model.Movies.Count>0)
+        {
+            <li class="page-item cursor-pointer">
+                <a class="page-link bg-dark text-light border-secondary m-1" href="/Visitor/home/index?search=@ViewBag.Search&page=@(ViewBag.CurrentPage + 1)&Name=@ViewBag.Name&Price=@ViewBag.Price&MovieStatus=@ViewBag.MovieStatus&Category=@ViewBag.Category&Cinema=@ViewBag.Cinem" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        }
     </ul>
 </nav>
 
@@ -186,17 +254,22 @@
 
 @section Scripts {
     <script>
+                window.addEventListener("load", function() {
+            var element = document.getElementById("moviesList");
+            if(element) {
+                element.scrollIntoView({ behavior: "smooth" });
+            }
+        });
+
+
+
         document.addEventListener("DOMContentLoaded", function () {
-                          var swiper = new Swiper(".mySwiper", {
+         var swiper = new Swiper(".mySwiper", {
             slidesPerView: 3,
             spaceBetween: 30,
             centeredSlides: true,
             loop: true,
             grabCursor: true,
-            autoplay: {
-                delay: 2500,
-                disableOnInteraction: false
-            },
             navigation: {
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
@@ -205,5 +278,7 @@
 
 
         });
+
+
     </script>
 }
