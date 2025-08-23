@@ -63,10 +63,10 @@ namespace Cinematic_Assets_Management.Areas.Visitor.Controllers
 
             int TotalCount = movies.Count();
 
-            decimal PageNumbers = Math.Ceiling((decimal)TotalCount / 3);
+            decimal PageNumbers = Math.Ceiling((decimal)TotalCount / 6);
             ViewBag.PageNumbers = PageNumbers;
 
-            movies = movies.Skip((page - 1) * 3).Take(3);
+            movies = movies.Skip((page - 1) * 6).Take(6);
 
 
 
