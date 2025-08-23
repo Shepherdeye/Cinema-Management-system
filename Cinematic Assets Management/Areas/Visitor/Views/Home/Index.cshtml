@@ -244,7 +244,7 @@
     <script>
 
         document.addEventListener("DOMContentLoaded", function () {
-         var swiper = new Swiper(".mySwiper", {
+           var swiper = new Swiper(".mySwiper", {
             slidesPerView: 3,
             spaceBetween: 30,
             centeredSlides: true,
@@ -254,8 +254,11 @@
                 nextEl: ".swiper-button-next",
                 prevEl: ".swiper-button-prev",
             },
+            autoplay: {
+                delay: 1000, 
+                disableOnInteraction: false 
+            }
         });
-
 
         });
 

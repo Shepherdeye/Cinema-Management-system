@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Cinematic_Assets_Management.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Cinematic_Assets_Management.Areas.Admin.Controllers
 {
@@ -62,28 +64,80 @@ namespace Cinematic_Assets_Management.Areas.Admin.Controllers
         [HttpGet]
         public IActionResult Edit(int id)
         {
+
             var movie = _context.Movies.FirstOrDefault(e => e.Id == id);
             if (movie is null)
             {
                 return RedirectToAction(SD.NotFoundPage, SD.AdminHomeController);
             }
 
-            return View(movie);
+
+            var categories = _context.Categories.ToList();
+            var cinemas = _context.Cinemas.ToList();
+
+
+            MovieWithData movieWithData = new()
+            {
+                Categories = categories,
+                Cinemas = cinemas,
+                Movie= movie,
+            };
+
+
+          
+            return View(movieWithData);
         }
 
-        public IActionResult Edit(Movie movie)
+        public IActionResult Edit(Movie movie,IFormFile? ImgUrl)
         {
+            var movieDB = _context.Movies.AsNoTracking().FirstOrDefault(e=>e.Id==movie.Id);
+            if (movieDB is null)
+            {
+                return BadRequest();
+
+            }
+
+            if (ImgUrl is not null && ImgUrl.Length > 0) {
+
+                var fileName = Guid.NewGuid().ToString()+Path.GetExtension(ImgUrl.FileName);
+                var filePath = Path.Combine(Directory.GetCurrentDirectory(),"wwwroot\\visitor\\assets",fileName);
+
+                using(var stream = System.IO.File.Create(filePath))
+                {
+                    ImgUrl.CopyTo(stream);
+                }
+
+                movie.ImgUrl = fileName;
+
+                var oldpath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\visitor\\assets", movieDB.ImgUrl);
+                if (System.IO.File.Exists(oldpath))
+                {
+                    System.IO.File.Delete(oldpath);
+                }
+
+            }
+            else
+            {
+                movie.ImgUrl = movieDB.ImgUrl;                   
+            }
             _context.Movies.Update(movie);
             _context.SaveChanges();
 
             return RedirectToAction(nameof(Index));
         }
+
+
         public IActionResult Delete(int id)
         {
             var movie = _context.Movies.FirstOrDefault(e => e.Id == id);
             if (movie is null)
                 return RedirectToAction(SD.NotFoundPage, SD.AdminHomeController);
 
+            var oldpath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\visitor\\assets", movie.ImgUrl);
+            if (System.IO.File.Exists(oldpath))
+            {
+                System.IO.File.Delete(oldpath);
+            }
 
             _context.Movies.Remove(movie);
             _context.SaveChanges();

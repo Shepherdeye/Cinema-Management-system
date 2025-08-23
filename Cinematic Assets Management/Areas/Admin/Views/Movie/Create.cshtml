@@ -29,9 +29,13 @@
             <!-- Poster Upload -->
             <div class="mb-3">
                 <label for="ImgUrl" class="form-label">Movie Poster</label>
-                <input type="file" class="form-control" id="ImgUrl" name="ImgUrl" accept="image/*">
+                <input type="file" class="form-control" id="ImgUrl" name="ImgUrl" accept="image/*" onchange="previewPoster(event)">
             </div>
 
+            <!-- Preview Image -->
+            <div class="mb-3">
+                <img id="posterPreview" src="#" alt="Poster Preview" class="img-thumbnail" style="max-width: 200px; display: none;">
+            </div>
             <!-- Trailer URL -->
             <div class="mb-3">
                 <label for="TrailerUrl" class="form-label">Trailer URL</label>
@@ -92,3 +96,22 @@
         </form>
     </div>
 </div>
+
+<script>
+    function previewPoster(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('posterPreview');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            preview.src = "#";
+            preview.style.display = 'none';
+        }
+    }
+</script>

@@ -1,9 +1,16 @@
 ﻿@model MovieWithData
-
+@{
+    var statuses = new List<StatusOption>
+    {
+        new StatusOption { Id = MovieStatus.Available, Name = "Available" },
+        new StatusOption { Id = MovieStatus.Expired, Name = "Expired" },
+        new StatusOption { Id = MovieStatus.Upcoming, Name = "Upcoming" }
+    };
+}
 
 <div class="container mt-5">
     <div class="card shadow-lg p-4">
-        <h3 class="text-center mb-4">Add Movie</h3>
+        <h3 class="text-center mb-4">Edit Movie</h3>
 
         <form method="post" enctype="multipart/form-data">
 
@@ -11,52 +18,70 @@
             <!-- Movie Name -->
             <div class="mb-3">
                 <label for="Name" class="form-label">Movie Name</label>
-                <input type="text" class="form-control" id="Name" name="Name" placeholder="Enter movie name" required>
+                <input type="text" class="form-control" value="@Model.Movie.Name" id="Name" name="Name" placeholder="Enter movie name" required>
             </div>
 
             <!-- Description -->
             <div class="mb-3">
                 <label for="Description" class="form-label">Description</label>
-                <textarea class="form-control" id="Description" name="Description" rows="4" placeholder="Enter description"></textarea>
+                <textarea class="form-control" id="Description" name="Description" rows="4" placeholder="Enter description">@Model.Movie.Description</textarea>
             </div>
 
             <!-- Price -->
             <div class="mb-3">
                 <label for="Price" class="form-label">Price</label>
-                <input type="number" step="0.01" class="form-control" id="Price" name="Price" placeholder="Enter price" required>
+                <input type="number" value="@Model.Movie.Price" step="0.01" class="form-control" id="Price" name="Price" placeholder="Enter price" required>
             </div>
 
             <!-- Poster Upload -->
             <div class="mb-3">
                 <label for="ImgUrl" class="form-label">Movie Poster</label>
-                <input type="file" class="form-control" id="ImgUrl" name="ImgUrl" accept="image/*">
+                <input type="file" class="form-control" id="ImgUrl" name="ImgUrl" accept="image/*" onchange="previewPoster(event)">
+            </div>
+
+            <!-- Current Poster Preview -->
+            <div class="mb-3">
+                <img id="posterPreview"
+                     src="~/visitor/assets/@Model.Movie.ImgUrl"
+                     alt="Current Poster"
+                     class="img-thumbnail"
+                     style="max-width: 200px; @(string.IsNullOrEmpty(Model.Movie.ImgUrl) ? "display:none;" : "")">
             </div>
 
             <!-- Trailer URL -->
             <div class="mb-3">
                 <label for="TrailerUrl" class="form-label">Trailer URL</label>
-                <input type="url" class="form-control" id="TrailerUrl" name="TrailerUrl" placeholder="https://youtube.com/...">
+                <input type="url" class="form-control" value="@Model.Movie.TrailerUrl" id="TrailerUrl" name="TrailerUrl" placeholder="https://youtube.com/...">
             </div>
 
             <!-- Start Date -->
             <div class="mb-3">
                 <label for="StartDate" class="form-label">Start Date</label>
-                <input type="datetime-local" class="form-control" id="StartDate" name="StartDate" required>
+                <input value="@Model.Movie.StartDate.ToString("yyyy-MM-ddTHH:mm")" type="datetime-local" class="form-control" id="StartDate" name="StartDate" required>
             </div>
 
             <!-- End Date -->
             <div class="mb-3">
                 <label for="EndDate" class="form-label">End Date</label>
-                <input type="datetime-local" class="form-control" id="EndDate" name="EndDate" required>
+                <input value="@Model.Movie.EndDate.ToString("yyyy-MM-ddTHH:mm")" type="datetime-local" class="form-control" id="EndDate" name="EndDate" required>
             </div>
 
             <!-- Movie Status -->
             <div class="mb-3">
                 <label for="MovieStatus" class="form-label">Movie Status</label>
                 <select class="form-control" id="MovieStatus" name="MovieStatus">
-                    <option value="0">Available</option>
-                    <option value="2">Upcoming</option>
-                    <option value="1">Expired</option>
+                    @foreach (var status in statuses)
+                    {
+                        if (status.Id == Model.Movie.MovieStatus)
+                        {
+                            <option selected value="@status.Id">@status.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@status.Id">@status.Name</option>
+                        }
+
+                    }
                 </select>
             </div>
 
@@ -67,7 +92,15 @@
                     <option value="">-- Select Cinema --</option>
                     @foreach (var cinema in Model.Cinemas)
                     {
-                        <option value="@cinema.Id">@cinema.Name</option>
+                        if (Model.Movie.CinemaId == cinema.Id)
+                        {
+                            <option selected value="@cinema.Id">@cinema.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@cinema.Id">@cinema.Name</option>
+                            
+                        }
                     }
                 </select>
             </div>
@@ -79,7 +112,16 @@
                     <option value="">-- Select Category --</option>
                     @foreach (var category in Model.Categories)
                     {
-                        <option value="@category.Id">@category.Name</option>
+                            if (Model.Movie.CategoryId == category.Id)
+                        {
+                            <option selected value="@category.Id">@category.Name</option>
+                        }
+                        else
+                        {
+                             <option value="@category.Id">@category.Name</option>
+                            
+                        }
+                      
                     }
                 </select>
             </div>
@@ -92,3 +134,24 @@
         </form>
     </div>
 </div>
+
+
+<script>
+    function previewPoster(event) {
+        const file = event.target.files[0];
+        const preview = document.getElementById('posterPreview');
+
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                preview.src = e.target.result;
+                preview.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+        } else {
+            // Keep the original image if no new file is selected
+            preview.src = "@Model.Movie?.ImgUrl";
+            preview.style.display = '@(string.IsNullOrEmpty(Model.Movie?.ImgUrl) ? "none" : "block")';
+        }
+    }
+</script>
