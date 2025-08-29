@@ -1,0 +1,66 @@
+﻿@model List<Actor>
+
+@section Scripts {
+    <partial name="_PartialNotification"></partial>
+}
+
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">All Categories</h2>
+
+    <a class="btn btn-primary start-0 float-end mb-3" href="/admin/actor/create">New</a>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-hover align-middle shadow-sm">
+            <thead class="table-dark text-center">
+                <tr class="text-center">
+                    <th scope="col">#</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Bio</th>
+                    <th scope="col">profile</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var actor in Model)
+                    {
+                        <tr class="text-center">
+                            <td>@actor.Id</td>
+                            <td>@actor.FirstName</td>
+                            <td>@actor.LastName</td>
+                            <td>@if (actor.Bio.Length>20)
+                                {
+                                    @actor.Bio.Substring(0, 20);
+                                   
+                                }
+                                else
+                                {
+                                    @actor.Bio;
+                                }
+                            </td>
+                            <td><img style="height:50px; width:50px; border-radius:60%; object-fit:cover;" class="rounded-1" src="~/visitor/assets/cast/@actor.ProfilePicture"/></td>
+                            <td>
+                                <a href="/admin/actor/related/@actor.Id" class="btn btn-primary btn-sm me-1">View Movies</a>
+                                <a href="/admin/actor/edit/@actor.Id" class="btn btn-warning btn-sm me-1">Edit</a>
+                                <a href="/admin/actor/delete/@actor.Id"
+                                   class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Are you sure you want to delete this category?');">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-center text-muted">No categories</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

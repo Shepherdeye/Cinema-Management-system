@@ -128,6 +128,28 @@ namespace Cinematic_Assets_Management.Migrations
                     b.ToTable("Cinemas");
                 });
 
+            modelBuilder.Entity("Cinematic_Assets_Management.Models.Images", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ImgUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MovieId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MovieId");
+
+                    b.ToTable("Images");
+                });
+
             modelBuilder.Entity("Cinematic_Assets_Management.Models.Movie", b =>
                 {
                     b.Property<int>("Id")
@@ -162,6 +184,7 @@ namespace Cinematic_Assets_Management.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("Price")
+                        .HasMaxLength(4)
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<DateTime>("StartDate")
@@ -195,6 +218,17 @@ namespace Cinematic_Assets_Management.Migrations
                         .IsRequired();
 
                     b.Navigation("Actor");
+
+                    b.Navigation("Movie");
+                });
+
+            modelBuilder.Entity("Cinematic_Assets_Management.Models.Images", b =>
+                {
+                    b.HasOne("Cinematic_Assets_Management.Models.Movie", "Movie")
+                        .WithMany("Images")
+                        .HasForeignKey("MovieId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Movie");
                 });
@@ -236,6 +270,8 @@ namespace Cinematic_Assets_Management.Migrations
             modelBuilder.Entity("Cinematic_Assets_Management.Models.Movie", b =>
                 {
                     b.Navigation("ActorMovies");
+
+                    b.Navigation("Images");
                 });
 #pragma warning restore 612, 618
         }

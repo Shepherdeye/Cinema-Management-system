@@ -18,6 +18,7 @@
 
     <!-- Custom styles for this template-->
     <link href="~/admin/css/sb-admin-2.min.css" rel="stylesheet">
+    <link href="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet">
 
 </head>
 
@@ -69,7 +70,8 @@
                         <a class="collapse-item" href="/admin/category/index">Category</a>
                         <a class="collapse-item" href="/admin/cinema/index">Cinema</a>
                         <a class="collapse-item" href="/admin/movie/index">Movies</a>
-                        <a class="collapse-item" href="">Actors</a>
+                        <a class="collapse-item" href="/admin/actor/index">Actors</a>
+                        <a class="collapse-item" href="/admin/actormovie/index">ActorMovie</a>
                     </div>
                 </div>
             </li>
@@ -364,6 +366,8 @@
     <!-- Page level custom scripts -->
     <script src="~/admin/js/demo/chart-area-demo.js"></script>
     <script src="~/admin/js/demo/chart-pie-demo.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    @await RenderSectionAsync("Scripts", required: false)
 
 </body>
 

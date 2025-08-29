@@ -1,0 +1,31 @@
+﻿@model ActorsData;
+
+
+@if (Model.ActorMovies.Any())
+{
+    <div class="container">
+        <div class="my-5">
+            <h3 class="m-2"> @Model.Actor?.FirstName @Model.Actor?.LastName</h3>
+            <div class="row g-3">
+                @foreach (var movie in Model.ActorMovies.ToList())
+                {
+                    <div class="col-md-4 mb-1">
+                        <div class="card bg-dark text-light h-100 shadow-sm">
+                            <img src="~/visitor/assets/@movie.Movie.ImgUrl" class="card-img-top" alt="@movie.Movie.Name">
+                            <div class="card-body">
+                                <h6 class="card-title">@movie.Movie.Name</h6>
+                                <small class="card-title text-danger ">@movie.Movie.Category?.Name</small>
+                                <br />
+                                <a href="/visitor/home/Details/@movie.Id" class="btn btn-outline-light btn-sm mt-2">View</a>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <h1 class="display-3 text-center">No Movies now !!</h1>
+}

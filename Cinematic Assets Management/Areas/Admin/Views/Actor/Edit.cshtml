@@ -1,0 +1,57 @@
+﻿@model Actor
+
+@section Scripts {
+    <partial name="_PartialNotification"></partial>
+    <partial name="_ValidationScriptsPartial"></partial>
+
+}
+
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-6 col-md-8 col-sm-12">
+            <div class="card shadow-lg border-0 rounded-4">
+                <div class="card-header bg-primary text-white text-center rounded-top">
+                    <h3 class="mb-0">Edit Actor</h3>
+                </div>
+                <div class="card-body p-4">
+                    <form method="post" enctype="multipart/form-data">
+                        <div class="mb-3">
+                            <label class="form-label fw-bold"></label>
+                            <input asp-for="FirstName" class="form-control form-control-lg" placeholder="Enter first name" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="LastName" class="form-label fw-bold"></label>
+                            <input asp-for="LastName" class="form-control form-control-lg" placeholder="Enter last name" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Bio" class="form-label fw-bold"></label>
+                            <textarea asp-for="Bio" class="form-control" rows="4" placeholder="Write a short biography"></textarea>
+                            <span asp-validation-for="Bio" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ProfilePicture" class="form-label fw-bold">Profile Picture</label>
+                            <input type="file" name="ProfilePicture" class="form-control" />
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="News" class="form-label fw-bold"></label>
+                            <textarea asp-for="News" class="form-control" rows="3" placeholder="Latest news about the actor"></textarea>
+                            <span asp-validation-for="News" class="text-danger"></span>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg shadow-sm">Save Actor</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Cancel</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -22,15 +22,25 @@ namespace Cinematic_Assets_Management.Areas.Admin.Controllers
         }
         [HttpGet]
         public IActionResult Create()
-        {
-            return View();
+        {          
+            return View(new Category ());
         }
+
         [HttpPost]
         public IActionResult Create(Category category)
         {
+
+            if (!ModelState.IsValid)
+            {
+                var errors = ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage));
+                TempData["error-notification"] = String.Join(", ",errors);
+                return View(category);
+            }
+
             _context.Categories.Add(category);
             _context.SaveChanges();
 
+            TempData["success-notification"]="Added successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -51,6 +61,7 @@ namespace Cinematic_Assets_Management.Areas.Admin.Controllers
         {
             _context.Categories.Update(category);
             _context.SaveChanges();
+            TempData["success-notification"] ="Updated Successfully";
 
             return RedirectToAction(nameof(Index));
         }
@@ -63,6 +74,7 @@ namespace Cinematic_Assets_Management.Areas.Admin.Controllers
 
             _context.Categories.Remove(category);
             _context.SaveChanges();
+            TempData["success-notification"] = "Deleted Successfully";
             return RedirectToAction(nameof(Index));
         }
     }

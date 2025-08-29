@@ -98,7 +98,7 @@ namespace Cinematic_Assets_Management.Areas.Visitor.Controllers
 
         public IActionResult Details(int id)
         {
-            var movie = _context.Movies.Include(e => e.Cinema).Include(e => e.Category).
+            var movie = _context.Movies.Include(e => e.Cinema).Include(e => e.Category).Include(e=>e.Images).
                 Include(e => e.ActorMovies).ThenInclude(e => e.Actor)
                 .FirstOrDefault(e => e.Id == id);
 

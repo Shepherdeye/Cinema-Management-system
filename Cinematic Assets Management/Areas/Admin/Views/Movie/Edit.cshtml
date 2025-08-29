@@ -1,12 +1,5 @@
 ﻿@model MovieWithData
-@{
-    var statuses = new List<StatusOption>
-    {
-        new StatusOption { Id = MovieStatus.Available, Name = "Available" },
-        new StatusOption { Id = MovieStatus.Expired, Name = "Expired" },
-        new StatusOption { Id = MovieStatus.Upcoming, Name = "Upcoming" }
-    };
-}
+
 
 <div class="container mt-5">
     <div class="card shadow-lg p-4">
@@ -70,18 +63,20 @@
             <div class="mb-3">
                 <label for="MovieStatus" class="form-label">Movie Status</label>
                 <select class="form-control" id="MovieStatus" name="MovieStatus">
-                    @foreach (var status in statuses)
+
+                    @foreach (MovieStatus item in Enum.GetValues(typeof(MovieStatus)))
                     {
-                        if (status.Id == Model.Movie.MovieStatus)
+                        if (item == Model.Movie.MovieStatus)
                         {
-                            <option selected value="@status.Id">@status.Name</option>
+                            <option selected value="@item">@item.ToString()</option>
                         }
                         else
                         {
-                            <option value="@status.Id">@status.Name</option>
+                            <option value="@item">@item.ToString()</option>
                         }
-
                     }
+
+
                 </select>
             </div>
 
@@ -99,7 +94,7 @@
                         else
                         {
                             <option value="@cinema.Id">@cinema.Name</option>
-                            
+
                         }
                     }
                 </select>
@@ -112,16 +107,16 @@
                     <option value="">-- Select Category --</option>
                     @foreach (var category in Model.Categories)
                     {
-                            if (Model.Movie.CategoryId == category.Id)
+                        if (Model.Movie.CategoryId == category.Id)
                         {
                             <option selected value="@category.Id">@category.Name</option>
                         }
                         else
                         {
-                             <option value="@category.Id">@category.Name</option>
-                            
+                            <option value="@category.Id">@category.Name</option>
+
                         }
-                      
+
                     }
                 </select>
             </div>

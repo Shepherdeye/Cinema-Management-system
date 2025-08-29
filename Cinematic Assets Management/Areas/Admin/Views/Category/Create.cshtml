@@ -1,11 +1,15 @@
-﻿<div class="container mt-5">
+﻿@model Category
+
+
+<div class="container mt-5">
     <div class="card shadow-lg p-4">
         <h3 class="text-center mb-4">Create New Category</h3>
         <form method="post">
             <!-- Category Name -->
             <div class="mb-3">
-                <label for="categoryName" class="form-label">Category Name</label>
-                <input  type="text" class="form-control" id="categoryName" name="Name" placeholder="Enter category name" required>
+                <label for="Name"  class="form-label">Category Name</label>
+                <input class="form-control"  asp-for="Name">
+              <span class="alert-danger" asp-validation-for="@Model.Name"></span>
             </div>
 
             <!-- Submit Button -->
@@ -15,3 +19,10 @@
         </form>
     </div>
 </div>
+
+
+
+@section Scripts {
+    <partial name="_PartialNotification"></partial>
+    <partial name="_ValidationScriptsPartial"></partial>
+}

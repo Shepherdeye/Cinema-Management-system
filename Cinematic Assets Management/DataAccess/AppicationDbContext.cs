@@ -9,6 +9,7 @@ namespace Cinematic_Assets_Management.DataAccess
         public DbSet<Cinema> Cinemas { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<ActorMovies> ActorMovies { get; set; }
+        public DbSet<Images> Images { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
 

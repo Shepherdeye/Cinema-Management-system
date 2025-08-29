@@ -56,6 +56,24 @@
             </div>
         </div>
     </div>
+    <!-- Extra Photos Section -->
+    @if (Model.Movie.Images.Any())
+    {
+        <div class="container mt-4">
+            <div class="row g-3">
+
+                @foreach (var img in Model.Movie.Images.ToList())
+                {
+                    <div class="col-6 col-md-3">
+                        <img src="~/visitor/assets/@img.ImgUrl" class="img-fluid rounded shadow-sm" alt="@img.ImgUrl">
+                    </div>
+
+                }
+
+            </div>
+        </div>
+    }
+
 
     <!-- Trailer Section -->
     <div class="my-5">
