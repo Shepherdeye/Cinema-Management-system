@@ -22,39 +22,41 @@ namespace Cinematic_Assets_Management.Areas.Admin.Controllers
             var categories = _context.Categories.ToList();
             var cinemas = _context.Cinemas.ToList();
             var actors = _context.Actors.ToList();
-            List <int> actorsIds= new List<int>();
+            List<int> actorsIds = new List<int>();
             Movie movie = new Movie();
-           
+
             MovieWithData movieWithData = new()
             {
                 Categories = categories,
                 Cinemas = cinemas,
                 Movie = movie,
                 Actors = actors,
-                ActorsIds=actorsIds
+                ActorsIds = actorsIds
             };
 
             return View(movieWithData);
         }
         [HttpPost]
-        public IActionResult Create(Movie movie, IFormFile ImgUrl, List<IFormFile>? Images,List<int> Actors) 
+        public IActionResult Create(Movie movie, IFormFile ImgUrl, List<IFormFile>? Images, List<int> Actors)
         {
             if (!ModelState.IsValid)
             {
                 var categories = _context.Categories.ToList();
                 var cinemas = _context.Cinemas.ToList();
+                var actorsList = _context.Actors.ToList();
 
                 MovieWithData movieWithData = new()
                 {
+
                     Categories = categories,
                     Cinemas = cinemas,
-
                     Movie = movie,
-                    ActorsIds=Actors
+                    Actors = actorsList,
+                    ActorsIds = Actors
                 };
 
                 var errors = ModelState.Values.SelectMany(e => e.Errors.Select(e => e.ErrorMessage));
-                TempData["error-notification"] = String.Join(", ",errors);
+                TempData["error-notification"] = String.Join(", ", errors);
 
 
 
@@ -78,33 +80,50 @@ namespace Cinematic_Assets_Management.Areas.Admin.Controllers
 
                 //save images
                 //to but the string of each img in array and  path  the  array  to the Images table
-                List<string> imagesNew = new List<string>();
-
-                foreach (var img in Images)
-                {
-                    var imgName = Guid.NewGuid().ToString() + Path.GetExtension(img.FileName);
-                    var imgPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\visitor\\assets", imgName);
-                    using (var stream2 = System.IO.File.Create(imgPath))
-                    {
-                        img.CopyTo(stream2);
-                    }
-
-                    imagesNew.Add(imgName);
-                }
 
                 _context.Movies.Add(movie);
                 _context.SaveChanges();
 
-                foreach (var img in imagesNew)
+
+                if (Images is not null && Images.Any() && Images.Count > 0)
                 {
-                    _context.Images.Add(new Images { MovieId = movie.Id, ImgUrl=img});
+                    List<string> imagesNew = new List<string>();
+
+                    foreach (var img in Images)
+                    {
+                        var imgName = Guid.NewGuid().ToString() + Path.GetExtension(img.FileName);
+                        var imgPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\visitor\\assets", imgName);
+                        using (var stream2 = System.IO.File.Create(imgPath))
+                        {
+                            img.CopyTo(stream2);
+                        }
+
+                        imagesNew.Add(imgName);
+                    }
+
+
+                    foreach (var img in imagesNew)
+                    {
+                        _context.Images.Add(new Images { MovieId = movie.Id, ImgUrl = img });
+
+                    }
+                    _context.SaveChanges();
+
 
                 }
-                foreach(var actor in Actors)
+
+                if (Actors.Any())
                 {
-                    _context.ActorMovies.Add(new ActorMovies { MovieId=movie.Id,ActorId=actor});
+                    foreach (var actor in Actors)
+                    {
+                        _context.ActorMovies.Add(new ActorMovies { MovieId = movie.Id, ActorId = actor });
+                    }
+
+                    _context.SaveChanges();
                 }
-                _context.SaveChanges();
+
+
+
 
                 return RedirectToAction(nameof(Index));
             }
@@ -124,23 +143,25 @@ namespace Cinematic_Assets_Management.Areas.Admin.Controllers
                 return RedirectToAction(SD.NotFoundPage, SD.AdminHomeController);
             }
 
-
             var categories = _context.Categories.ToList();
             var cinemas = _context.Cinemas.ToList();
-
+            var actors = _context.Actors.ToList();
+            List<int> actorsIds = _context.ActorMovies.Where(e => e.MovieId == movie.Id).Select(e => e.ActorId).ToList();
 
             MovieWithData movieWithData = new()
             {
                 Categories = categories,
                 Cinemas = cinemas,
                 Movie = movie,
+                Actors = actors,
+                ActorsIds = actorsIds
             };
 
 
             return View(movieWithData);
         }
 
-        public IActionResult Edit(Movie movie, IFormFile? ImgUrl)
+        public IActionResult Edit(Movie movie, IFormFile? ImgUrl, List<IFormFile>? Images, List<int> Actors)
         {
             var movieDB = _context.Movies.AsNoTracking().FirstOrDefault(e => e.Id == movie.Id);
             if (movieDB is null)
@@ -173,8 +194,69 @@ namespace Cinematic_Assets_Management.Areas.Admin.Controllers
             {
                 movie.ImgUrl = movieDB.ImgUrl;
             }
+
+
+            if (Images is not null && Images.Count > 0)
+            {
+
+                List<string> newImages = new();
+
+                var oldImages = _context.Images.Where(e => e.MovieId == movie.Id).ToList();
+
+                _context.Images.RemoveRange(oldImages);
+
+                foreach (var img in Images)
+                {
+
+                    var imgName = Guid.NewGuid().ToString() + Path.GetExtension(img.FileName);
+                    var imgPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot\\visitor\\assets", imgName);
+
+                    using (var stream = System.IO.File.Create(imgPath))
+                    {
+                        img.CopyTo(stream);
+                    }
+
+                    newImages.Add(imgName);
+
+
+                }
+
+                // add images to ==> images tabel
+
+                foreach (var img in newImages)
+                {
+                    _context.Images.Add(new() { MovieId = movie.Id, ImgUrl = img });
+                }
+            }
+
+            if (Actors.Any())
+            {
+
+                var oldActorsIds = _context.ActorMovies.Where(e => e.MovieId == movie.Id).Select(e => e.ActorId).ToList();
+                var actorToAdd = Actors.Except(oldActorsIds);
+                var actorToRemove = oldActorsIds.Except(Actors);
+
+                foreach (var newActorId in actorToAdd)
+                {
+                    _context.ActorMovies.Add(new() {ActorId= newActorId,MovieId=movie.Id });
+                }
+
+                foreach (var deletedActorId in actorToRemove)
+                {
+                    var detedActor = _context.ActorMovies.AsNoTracking().FirstOrDefault(e => e.ActorId == deletedActorId);
+                    if (detedActor is null)
+                        return NotFound();
+
+                    _context.ActorMovies.Remove(detedActor);
+                }
+
+            }
+
+
+
             _context.Movies.Update(movie);
             _context.SaveChanges();
+
 
             return RedirectToAction(nameof(Index));
         }

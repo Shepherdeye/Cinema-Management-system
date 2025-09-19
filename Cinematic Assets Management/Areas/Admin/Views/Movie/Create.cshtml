@@ -106,7 +106,6 @@
                         {
                             <option value="@item">@item.ToString()</option>
                         }
-
                     }
                 </select>
             </div>
@@ -158,10 +157,18 @@
                     <option value="">-- Select Actors--</option>
                     @foreach (var actor in Model.Actors)
                     {
-                     
-                    <option selected value="@actor.Id">@actor.FirstName @actor.LastName</option>
 
-                     }
+                        if (Model.ActorsIds.Contains(actor.Id))
+                        {
+                            <option selected value="@actor.Id">@actor.FirstName @actor.LastName</option>
+
+                        }
+                        else
+                        {
+                             <option value="@actor.Id">@actor.FirstName @actor.LastName</option>
+
+                        }
+                    }
                 </select>
             </div>
 
